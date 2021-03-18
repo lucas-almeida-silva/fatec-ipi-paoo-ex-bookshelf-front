@@ -1,24 +1,41 @@
 <mat-card>
-  <mat-form-field appearance="outline">
-    <mat-label>Título</mat-label>
-    <input matInput [(ngModel)]="book.title">
-  </mat-form-field>
+  <form (ngSubmit)="handleSubmit()" #registerBookForm="ngForm">
+    <mat-form-field appearance="outline">
+      <mat-label>Título</mat-label>
+      <input matInput name="title" ngModel required minlength="3">
+      <mat-error *ngIf="registerBookForm.controls.title?.hasError('required')">
+        Campo obrigatório
+      </mat-error>
+      <mat-error *ngIf="registerBookForm.controls.title?.hasError('minlength')">
+        O nome deve ter no mínimo 3 caracteres
+      </mat-error>
+    </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Author</mat-label>
-    <input matInput [(ngModel)]="book.author">
-  </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Author</mat-label>
+      <input matInput name="author" required ngModel>
+      <mat-error *ngIf="registerBookForm.controls.author?.hasError('required')">
+        Campo obrigatório
+      </mat-error>
+      <mat-error *ngIf="registerBookForm.controls.title?.hasError('minlength')">
+        O nome do autor deve ter no mínimo 3 caracteres
+      </mat-error>
+    </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Total de Páginas</mat-label>
-    <input type="number" matInput [(ngModel)]="book.totalPages">
-  </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Total de Páginas</mat-label>
+      <input type="number" matInput name="totalPages" ngModel required>
+      <mat-error *ngIf="registerBookForm.controls.totalPages?.hasError('required')">
+        Campo obrigatório
+      </mat-error>
+    </mat-form-field>
 
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="handleAddBook()"
-  >
-    Adicionar
-  </button>
+    <button
+      type="submit"
+      mat-raised-button
+      color="primary"
+    >
+      Adicionar
+    </button>
+  </form>
 </mat-card>

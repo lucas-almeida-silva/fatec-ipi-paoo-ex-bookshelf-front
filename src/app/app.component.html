@@ -1,12 +1,11 @@
 <app-header title="Livros"></app-header>
 <main>
-  <app-insert-book (bookAdded)="handleAddBook($event)"></app-insert-book>
+  <app-insert-book></app-insert-book>
 
   <div class="books-list">
     <h1>Livros</h1>
     <mat-divider></mat-divider>
 
-    <app-list-books [books]="books"></app-list-books>
+    <app-list-books></app-list-books>
   </div>
-
 </main>
