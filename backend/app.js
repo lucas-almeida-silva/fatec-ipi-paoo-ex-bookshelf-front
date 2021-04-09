@@ -1,45 +1,41 @@
 const express = require('express');
 const cors = require('cors');
-const { v4: uuid } = require('uuid');
+const mongoose = require('mongoose');
+require('dotenv').config({ path: `${__dirname}/.env` });
+
+const Book = require('./models/Book');
+const dbConfig = require('./config/database.js');
+
+mongoose.connect(
+  `mongodb+srv://${ dbConfig.mongoDb.user}:${ dbConfig.mongoDb.password}@cluster0.0vydl.mongodb.net/${dbConfig.mongoDb.database}?retryWrites=true&w=majority`,
+  { useNewUrlParser: true, useUnifiedTopology: true }
+)
+.then(() => console.log('Connection to MongoDB successful'))
+.catch(() => console.log('Connection to MongoDB failed'));
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 
-const books = [
-  {
-    id: uuid(),
-    title: 'Código limpo: habilidades práticas do Agile Software',
-    author: 'Robert C. Martin',
-    totalPages: 422
-  },
-  {
-    id: uuid(),
-    title: 'Domain-Driven Design: atacando as complexidades no coração do software',
-    author: 'Evans Eric',
-    totalPages: 563
-  },
-  {
-    id: uuid(),
-    title: 'Padrões de Projetos: Soluções Reutilizáveis de Software Orientados a Objetos',
-    author: 'Erick Gamma, Richard Helm, Ralph Johnson e John Vlissides',
-    totalPages: 368
-  }
-];
-
 app.get('/api/books', (req, res) => {
-  return res.json(books);
+  Book.find().then(books => {
+    res.json(books);
+  });
 });
 
 app.post('/api/books', (req, res) => {
-  const { name, title, author, totalPages } = req.body;
+  const { title, author, totalPages } = req.body;
 
-  const book = { id: uuid(), name, title, author, totalPages };
+  const book = new Book({
+    title,
+    author,
+    totalPages
+  });
 
-  books.push(book);
+  book.save();
 
-  return res.status(201).send(book);
+  res.status(201).send(book);
 });
 
 module.exports = app;

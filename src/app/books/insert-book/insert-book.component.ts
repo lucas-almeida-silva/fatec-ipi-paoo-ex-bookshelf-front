@@ -1,6 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { v4 as uuid } from 'uuid';
 
 import { Book } from '../book.model';
 import { BookService } from '../book.service';
